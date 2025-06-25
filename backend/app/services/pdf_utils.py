@@ -1,11 +1,13 @@
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_community.document_loaders import PyPDFLoader
+from langchain_core.documents import Document
+from typing import List
 
-def extract_data_from_pdf(file_path):
+def extract_data_from_pdf(file_path:str) -> List[Document]:
     """
     Tries to extract structured data from a PDF using UnstructuredPDFLoader.
     Falls back to PyPDFLoader if there's a failure (e.g., Poppler/Model issues).
-    Returns text which is obtained by joining list of documents.
+    Returns a list[Document]
     """
     try:
         print("[INFO] Trying UnstructuredPDFLoader...")
@@ -17,6 +19,5 @@ def extract_data_from_pdf(file_path):
         loader = PyPDFLoader(file_path)
         documents=loader.load()
         print("[INFO] Successfully loaded with PyPDFLoader.")
-    
-    full_text = "\n\n".join(doc.page_content for doc in documents)
-    return full_text
+        
+    return documents
