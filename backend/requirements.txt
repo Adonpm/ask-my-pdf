@@ -1,0 +1,8 @@
+langchain
+langchain-community
+unstructured
+pdfminer.six>=20221120
+pi_heif
+unstructured_inference
+pdf2image
+unstructured_pytesseract
