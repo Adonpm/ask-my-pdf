@@ -3,7 +3,7 @@ from backend.app.services.vector_store import get_vector_store, add_documents, g
 from backend.app.core.chunker import chunk_documents_semantic, chunk_documents_recursive
 from backend.app.services.rag_chain import rag_chain
 
-def rag_pipeline(file_path:str, use_semantic:bool = False, user_input="What is autocad"):
+def rag_pipeline(file_path:str, user_input:str, use_semantic:bool = False) -> str:
     print("[STEP 1] Extracting document pages...")
     docs = extract_data_from_pdf(file_path)
     print(f"[INFO] Total pages extracted: {len(docs)}")
@@ -25,8 +25,5 @@ def rag_pipeline(file_path:str, use_semantic:bool = False, user_input="What is a
     chain = rag_chain(retriever)
 
     print(f"[STEP 5] Querying user input...")
-    chain.invoke(user_input)
-    print(chain.invoke(user_input))
+    return chain.invoke(user_input)
     
-if __name__ == "__main__":
-    rag_pipeline(r"D:\PERSONAL\Agentic-AI-Masterclass\2. Langchain Basics\data\llama2.pdf", use_semantic=False)
