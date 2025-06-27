@@ -18,6 +18,7 @@ An intelligent PDF document analysis tool powered by advanced AI technologies th
 ### Backend
 - **DeepSeek-R1**: Advanced Large Language Model for intelligent responses
 - **LangChain**: AI orchestration and prompt management
+- **Hugging Face**: Vector embeddings
 - **FastAPI**: High-performance web framework
 - **MILVUS**: Vector database for efficient similarity search
 - **Python**: Core backend language
