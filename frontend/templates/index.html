@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMyPDF</title>
+</head>
+<body>
+    <h1>Ask Your PDF</h1>
+    <form id="ragForm" enctype="multipart/form-data">
+        <input type="file" name="pdf" required><br>
+        <input type="text" name="query" required><br>
+        <label><input type="checkbox" name="use_semantic">Use Semantic Chunking</label><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="answerBox" style="margin-top: 20px; font-weight: bold;"></div>
+    <script>
+        const form = document.getElementById('ragForm')
+        const answerBox = document.getElementById('answerBox')
+
+        form.addEventListener('submit', async(e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form)
+            const response = await fetch('/rag', {
+                method: 'POST',
+                body: formData
+            })
+
+            const result = await response.json();
+
+            if (result.answer) {
+                answerBox.innerText = "Answer: " + result.answer;
+            } else if (result.error) {
+                answerBox.innerText = "Error: " + result.error;
+            }
+        });
+    </script>
+</body>
+</html>
