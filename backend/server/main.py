@@ -3,7 +3,7 @@ from backend.app.workflows.rag_pipeline import rag_pipeline
 import os
 import asyncio
 
-app = Flask(__name__, template_folder='../../frontend/templates')
+app = Flask(__name__, template_folder='../../frontend/templates', static_folder='../../frontend/templates')
 
 # Homepage
 @app.route("/", methods=["GET"])
