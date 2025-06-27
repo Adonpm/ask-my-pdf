@@ -1,8 +1,15 @@
 langchain
 langchain-community
+langchain-core
+langchain-experimental
+langchain-huggingface
+langchain-groq
+textsplit
 unstructured
 pdfminer.six>=20221120
 pi_heif
 unstructured_inference
 pdf2image
 unstructured_pytesseract
+sentence-transformers
+langchain-milvus
