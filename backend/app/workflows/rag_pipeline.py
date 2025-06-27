@@ -3,7 +3,7 @@ from backend.app.services.vector_store import get_vector_store, add_documents, g
 from backend.app.core.chunker import chunk_documents_semantic, chunk_documents_recursive
 from backend.app.services.rag_chain import rag_chain
 
-def rag_pipeline(file_path:str, user_input:str, use_semantic:bool = False) -> str:
+async def rag_pipeline(file_path:str, user_input:str, use_semantic:bool = False) -> str:
     print("[STEP 1] Extracting document pages...")
     docs = extract_data_from_pdf(file_path)
     print(f"[INFO] Total pages extracted: {len(docs)}")
@@ -25,5 +25,6 @@ def rag_pipeline(file_path:str, user_input:str, use_semantic:bool = False) -> st
     chain = rag_chain(retriever)
 
     print(f"[STEP 5] Querying user input...")
-    return chain.invoke(user_input)
+    result = await chain.ainvoke(user_input)
+    return result
     
