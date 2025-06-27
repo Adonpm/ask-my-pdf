@@ -18,7 +18,7 @@ def run_rag():
     
     file = request.files["pdf"]
     user_input = request.form["query"]
-    use_semantic = request.form.get("use_semantic", "false").lower() == "true"
+    use_semantic = request.form.get("use_semantic", "false").lower() == "false"
 
     print(f"[DEBUG] File: {file.filename}, Query: {user_input}")
 
