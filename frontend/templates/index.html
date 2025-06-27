@@ -3,37 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskMyPDF</title>
+    <title>AskMyPDF - Smart Document Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Ask Your PDF</h1>
-    <form id="ragForm" enctype="multipart/form-data">
-        <input type="file" name="pdf" required><br>
-        <input type="text" name="query" required><br>
-        <label><input type="checkbox" name="use_semantic">Use Semantic Chunking</label><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div class="container">
+        <!-- Main Heading -->
+        <div class="main-heading">
+            <h1>AskMyPDF</h1>
+        </div>
 
-    <div id="answerBox" style="margin-top: 20px; font-weight: bold;"></div>
+        <!-- Description -->
+        <div class="description">
+            <p>Upload any PDF document and ask intelligent questions about its content. Our advanced RAG system uses AI to understand your documents and provide accurate, contextual answers instantly.</p>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="tech-stack">
+            <div class="tech-item deepseek">
+                <i class="fas fa-brain"></i>
+                <div class="tech-info">
+                    <h4>DeepSeek-R1</h4>
+                    <span>Advanced LLM Model</span>
+                </div>
+            </div>
+            <div class="tech-item langchain">
+                <i class="fas fa-link"></i>
+                <div class="tech-info">
+                    <h4>LangChain</h4>
+                    <span>AI Orchestrator</span>
+                </div>
+            </div>
+            <div class="tech-item fastapi">
+                <i class="fas fa-rocket"></i>
+                <div class="tech-info">
+                    <h4>FastAPI</h4>
+                    <span>Backend Framework</span>
+                </div>
+            </div>
+            <div class="tech-item milvus">
+                <i class="fas fa-database"></i>
+                <div class="tech-info">
+                    <h4>MILVUS</h4>
+                    <span>Vector Database</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Section -->
+        <div class="main-section">
+            <!-- File Upload -->
+            <div class="upload-container">
+                <div class="upload-box" id="uploadBox">
+                    <input type="file" id="pdfFile" name="pdf" accept=".pdf" required style="display: none;">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Upload Your PDF</h3>
+                    <p>Click here or drag and drop your PDF file</p>
+                    <div class="file-name" id="fileName" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <form id="ragForm" enctype="multipart/form-data">
+                    <!-- Question Input -->
+                    <div class="question-box">
+                        <label for="questionInput">
+                            <i class="fas fa-question-circle"></i>
+                            Ask Your Question
+                        </label>
+                        <input type="text" id="questionInput" name="query" placeholder="What would you like to know about your PDF?" required>
+                    </div>
+
+                    <!-- Semantic Chunking Option -->
+                    <div class="option-box">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="use_semantic">
+                            <span class="checkmark"></span>
+                            <div class="option-text">
+                                <strong>Use Semantic Chunking</strong>
+                                <small>Enhanced context understanding for better answers</small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Ask Your PDF
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Answer Section -->
+        <div class="answer-section" id="answerSection" style="display: none;">
+            <div class="answer-box">
+                <div class="answer-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>AI Answer</h3>
+                </div>
+                <div class="answer-content" id="answerContent">
+                    <!-- Answer will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div class="loading-section" id="loadingSection" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Processing your PDF and generating answer...</p>
+        </div>
+    </div>
+
     <script>
-        const form = document.getElementById('ragForm')
-        const answerBox = document.getElementById('answerBox')
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('pdfFile');
+        const fileName = document.getElementById('fileName');
+        const form = document.getElementById('ragForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const answerSection = document.getElementById('answerSection');
+        const answerContent = document.getElementById('answerContent');
+        const loadingSection = document.getElementById('loadingSection');
 
-        form.addEventListener('submit', async(e) => {
+        // File upload handling
+        uploadBox.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.classList.add('drag-over');
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.classList.remove('drag-over');
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        });
+
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect() {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileName.textContent = `Selected: ${file.name}`;
+                fileName.style.display = 'block';
+                uploadBox.classList.add('file-selected');
+                uploadBox.querySelector('h3').textContent = 'PDF Uploaded Successfully!';
+                uploadBox.querySelector('p').textContent = 'Ready to ask questions';
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const formData = new FormData(form)
-            const response = await fetch('/rag', {
-                method: 'POST',
-                body: formData
-            })
+            if (!fileInput.files.length) {
+                alert('Please select a PDF file first!');
+                return;
+            }
 
-            const result = await response.json();
+            // Show loading
+            loadingSection.style.display = 'block';
+            answerSection.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
-            if (result.answer) {
-                answerBox.innerText = "Answer: " + result.answer;
-            } else if (result.error) {
-                answerBox.innerText = "Error: " + result.error;
+            const formData = new FormData();
+            formData.append('pdf', fileInput.files[0]);
+            formData.append('query', document.getElementById('questionInput').value);
+            formData.append('use_semantic', document.querySelector('input[name="use_semantic"]').checked);
+
+            try {
+                const response = await fetch('/rag', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                // Hide loading
+                loadingSection.style.display = 'none';
+
+                if (result.answer) {
+                    answerContent.innerHTML = `<p>${result.answer}</p>`;
+                    answerSection.style.display = 'block';
+                    answerSection.scrollIntoView({ behavior: 'smooth' });
+                } else if (result.error) {
+                    answerContent.innerHTML = `<div class="error-msg"><i class="fas fa-exclamation-triangle"></i> Error: ${result.error}</div>`;
+                    answerSection.style.display = 'block';
+                }
+            } catch (error) {
+                loadingSection.style.display = 'none';
+                answerContent.innerHTML = `<div class="error-msg"><i class="fas fa-exclamation-triangle"></i> Network Error: ${error.message}</div>`;
+                answerSection.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Ask Your PDF';
             }
         });
     </script>
