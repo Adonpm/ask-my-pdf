@@ -9,20 +9,23 @@ from pymilvus import utility
 load_dotenv()
 os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN")
 os.environ["MILVUS_API_KEY"] = os.getenv("MILVUS_API_KEY")
-URI = os.getenv("MILVUS_URI")
-TOKEN = os.getenv("MILVUS_TOKEN")
 
 # Vector embeddings
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 
-def get_vector_store(URI=URI, index_type:str='FLAT', metric_type:str='L2', collection_name='ask_my_pdf_collection'):
+def get_vector_store(index_type:str='FLAT', metric_type:str='L2', collection_name='ask_my_pdf_collection'):
     '''
     Setting up vector store using Milvus.
-    
     '''
+    URI = os.getenv("MILVUS_URI")
+    TOKEN = os.getenv("MILVUS_TOKEN")
+
+    if not URI or not TOKEN:
+        raise ValueError("Missing MILVUS_URI or MILVUS_TOKEN in environment variables")
+
     vector_store = Milvus(
         embedding_function=embeddings,
-        connection_args={"uri": URI, "token": TOKEN},
+        connection_args={"uri": URI, "token": TOKEN, "secure": True},
         collection_name=collection_name,
         index_params={"index_type": index_type, "metric_type": metric_type}
     )
@@ -52,5 +55,5 @@ def get_retriever(vector_store:Milvus, k:int=3):
     Setting up retriever
     '''
     print(f"[INFO] Retrieving is going on...")
-    return vector_store.as_retriever(searc_kwargs={"k": k})
+    return vector_store.as_retriever(search_kwargs={"k": k})
     
