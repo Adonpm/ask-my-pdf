@@ -11,7 +11,6 @@ pi_heif
 unstructured_inference
 pdf2image
 unstructured_pytesseract
-sentence-transformers
 langchain-milvus
 flask
 gunicorn
