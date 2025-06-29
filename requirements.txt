@@ -14,3 +14,4 @@ unstructured_pytesseract
 sentence-transformers
 langchain-milvus
 flask
+gunicorn
