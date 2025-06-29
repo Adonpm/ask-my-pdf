@@ -4,16 +4,16 @@ from langchain_core.documents import Document
 from typing import List
 import os
 from dotenv import load_dotenv
-from pymilvus import utility
+from pymilvus import utility, connections
 
 load_dotenv()
 os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN")
 os.environ["MILVUS_API_KEY"] = os.getenv("MILVUS_API_KEY")
 
 # Vector embeddings
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-def get_vector_store(index_type:str='FLAT', metric_type:str='L2', collection_name='ask_my_pdf_collection'):
+def get_vector_store(index_type:str='FLAT', metric_type:str='COSINE', collection_name='ask_my_pdf_collection'):
     '''
     Setting up vector store using Milvus.
     '''
@@ -22,6 +22,11 @@ def get_vector_store(index_type:str='FLAT', metric_type:str='L2', collection_nam
 
     if not URI or not TOKEN:
         raise ValueError("Missing MILVUS_URI or MILVUS_TOKEN in environment variables")
+    
+    connections.connect(uri=URI, token=TOKEN, secure=True)
+    if utility.has_collection(collection_name):
+        print(f"\nCollection '{collection_name}' already exists. Dropping and recreating...")
+        utility.drop_collection(collection_name)
 
     vector_store = Milvus(
         embedding_function=embeddings,
