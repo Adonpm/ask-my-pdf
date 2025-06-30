@@ -34,8 +34,8 @@ An intelligent PDF document analysis tool powered by advanced AI technologies th
 ```
 ASK-MY-PDF/
 ├── .github/
-│   ├── workflows/
-│   │   ├── deploy.yml
+│   └── workflows/
+│       └──  deploy.yml
 │ 
 ├── backend/
 │   ├── app/
