@@ -33,13 +33,15 @@ An intelligent PDF document analysis tool powered by advanced AI technologies th
 
 ```
 ASK-MY-PDF/
+├── .github/
+│   ├── workflows/
+│   │   ├── deploy.yml
+│ 
 ├── backend/
 │   ├── app/
 │   │   ├── core/
 │   │   │   ├── __init__.py
 │   │   │   └── chunker.py
-│   │   ├── models/
-│   │   │   └── __init__.py
 │   │   ├── services/
 │   │   │   ├── __init__.py
 │   │   │   ├── pdf_utils.py
@@ -56,7 +58,9 @@ ASK-MY-PDF/
 │   └── templates/
 │       └── index.html
 ├── requirements.txt
+├── Dockerfile
 ├── .env
+├── .dockerignore
 ├── .gitignore
 └── README.md
 ```
@@ -94,28 +98,8 @@ ASK-MY-PDF/
    ```
 
 4. **Set up environment variables**
-   ```bash
-   # Create .env file and add your API keys
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-### Running the Application
-
-**Current Version (Local Development)**
-```bash
-# Make sure you're in the project root directory and virtual environment is activated
-(venv) python -m backend.server.main
-```
-
-The application will start on `http://127.0.0.1:5000/`
-
-## 🎯 Usage
-
-1. **Upload PDF**: Click on the upload area or drag and drop your PDF file
-2. **Ask Questions**: Type your question about the document content
-3. **Optional**: Enable semantic chunking for enhanced context understanding
-4. **Get Answers**: Click "Ask Your PDF" to receive AI-generated responses
+   - Create a .env file in the project root directory.
+   - Add your API keys and settings as shown in the configuration section below.
 
 ## 🔧 Configuration
 
@@ -137,6 +121,23 @@ DEBUG=True
 MAX_FILE_SIZE=10MB
 ALLOWED_EXTENSIONS=pdf
 ```
+
+### Running the Application
+
+**Current Version (Local Development)**
+```bash
+# Make sure you're in the project root directory and virtual environment is activated
+(venv) python -m backend.server.main
+```
+
+The application will start on `http://127.0.0.1:7860/` 
+
+## 🎯 Usage
+
+1. **Upload PDF**: Click on the upload area or drag and drop your PDF file
+2. **Ask Questions**: Type your question about the document content
+3. **Optional**: Enable semantic chunking for enhanced context understanding
+4. **Get Answers**: Click "Ask Your PDF" to receive AI-generated responses
 
 ## 🌟 Features in Detail
 
