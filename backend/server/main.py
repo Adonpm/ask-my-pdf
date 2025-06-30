@@ -36,6 +36,6 @@ def run_rag():
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
-    print("[INFO] Starting Flask server on http://127.0.0.1:5000")
+    print("[INFO] Starting Flask server on http://127.0.0.1:7860")
     port = int(os.getenv("PORT", 7860))
     app.run(host="0.0.0.0", port=port, debug=True)
