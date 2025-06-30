@@ -1,6 +1,6 @@
-# AskMyPDF - Smart Document Assistant
+# AskMyPDF -  Smart RAG-Powered PDF Assistant
 
-An intelligent PDF document analysis tool powered by advanced AI technologies that allows users to upload PDF documents and ask contextual questions about their content.
+An intelligent PDF document analysis tool powered by advanced AI technologies that allows users to upload PDF documents and ask contextual questions about their content using our optimized RAG (Retrieval-Augmented Generation) pipeline.
 
 ![AskMyPDF Banner](https://img.shields.io/badge/AskMyPDF-Smart%20Document%20Assistant-blue?style=for-the-badge)
 
