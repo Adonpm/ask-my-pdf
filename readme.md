@@ -6,7 +6,7 @@ An intelligent PDF document analysis tool powered by advanced AI technologies th
 
 ## 🎬 Demo
 
-![AskMyPDF Demo](demo/ask-my-pdf-demo-video.mp4)
+![AskMyPDF Demo](demo/ask-my-pdf-demo-video.gif)
 
 ## ✨ Features
 
