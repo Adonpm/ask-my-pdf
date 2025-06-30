@@ -4,6 +4,10 @@ An intelligent PDF document analysis tool powered by advanced AI technologies th
 
 ![AskMyPDF Banner](https://img.shields.io/badge/AskMyPDF-Smart%20RAG--Powered%20PDF%20Assistant-blue?style=for-the-badge)
 
+## 🎬 Demo
+
+![AskMyPDF Demo](demo/ask-my-pdf-demo-video.mp4)
+
 ## ✨ Features
 
 - **📄 PDF Upload & Processing**: Seamlessly upload and process PDF documents
